@@ -1,27 +1,28 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		int T = Integer.parseInt(br.readLine());
-		
-		for (int test = 0; test < T; test++) {
-			char[] quiz = br.readLine().toCharArray();
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int T = sc.nextInt();
+		for (int t = 1; t <= T; t++) {
+			char[] score = sc.next().toCharArray();
 			
-			int count = 0;
-			int score = 0;
-			for (int i = 0; i < quiz.length; i++) {
-				if (quiz[i] == 'O') {
-					score++;
-					count +=score;
-				} else {
-					score =0;
+			int total = 0;
+			int sum = 0;
+			
+			for (int i = 0; i < score.length; i++) {
+				if(score[i] == 'O') {
+					sum += 1;
+					total += sum;
+				}
+
+				else {
+						sum = 0;
 				}
 			}
-			System.out.println(count);
+			System.out.println(total);
 		}
 	}
+
 }
