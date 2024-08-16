@@ -4,34 +4,34 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
+	public static void main(String[] args) throws IOException {
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
+		
 		int n = Integer.parseInt(st.nextToken());
 		int m = Integer.parseInt(st.nextToken());
 		int l = Integer.parseInt(st.nextToken());
-
-		int[] count = new int[n];
-
-		int increase = 0;
-		count[increase] = 1;
-		while (true) {
-			if (count[increase] == m)
-				break;
-			if (count[increase] % 2 == 1) {
-				increase = (increase + l) % n;
-			} else
-				increase = (increase - l + n) % n;
-
-			count[increase]++;
+		
+		int[] sit = new int[n+1];
+		
+		int idx = 1, cnt=0;
+		sit[1] = 1;
+		
+		while(sit[idx]<m) {
+			cnt++;
+			if(sit[idx]%2 != 0) {
+				idx = (idx+l)%n == 0 ? n : (idx+l)%n;
+				++sit[idx];
+			} else {
+				idx = (idx+(n-l))%n == 0 ? n : (idx+(n-l))%n;
+				++sit[idx];
+			}
 		}
 		
-		int sum =0;
-		for (int i = 0; i < count.length; i++) {
-			sum += count[i];
-		}
-		System.out.println(sum-1);
-
+		System.out.println(cnt);
+		
 	}
+
 }
