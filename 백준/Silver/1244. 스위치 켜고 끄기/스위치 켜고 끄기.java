@@ -1,57 +1,68 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-
-	static int[] swich;
-
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		// 남학생 : 자신의 배수 상태를 바꿈
+		// 여학생 : 자신의 수 스위치를 중심으로 좌우 대칭이면서 가장 많은 스위치를 포함하는 구간 찾음.
 
-		int num = Integer.parseInt(br.readLine());
+		int n = Integer.parseInt(br.readLine());
 
-		swich = new int[num];
+		int[] arr = new int[n];
+		String[] st = br.readLine().split(" ");
+		for (int i = 0; i < n; i++)
+			arr[i] = Integer.parseInt(st[i]);
 
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < swich.length; i++) {
-			swich[i] = Integer.parseInt(st.nextToken());
-		}
+		int person = Integer.parseInt(br.readLine());
 
-		int people = Integer.parseInt(br.readLine());
-
-		for (int i = 0; i < people; i++) {
-			st = new StringTokenizer(br.readLine());
-			int sex = Integer.parseInt(st.nextToken());
-			int n = Integer.parseInt(st.nextToken());
-
-			if (sex == 1) {
-				for (int j = 0; j < num; j++) {
-					if ((j + 1) % n == 0) {
-						swich[j] = swich[j] == 0 ? 1 : 0;
+		int[][] switches = new int[person][2];
+		for (int i = 0; i < person; i++) {
+			String[] str = br.readLine().split(" ");
+			switches[i][0] = Integer.parseInt(str[0]);
+			switches[i][1] = Integer.parseInt(str[1]);
+			// 남학생
+			if (switches[i][0] == 1) {
+				int cur = switches[i][1]-1;
+				while (cur < n) {
+					if (arr[cur] == 0) {
+						arr[cur] = 1;
+					} else if (arr[cur] == 1) {
+						arr[cur] = 0;
 					}
+					cur += switches[i][1];
 				}
-			} else {
-				swich[n - 1] = swich[n - 1] == 0 ? 1 : 0;
-				for (int j = 1; j < num / 2; j++) {
-					if (n - 1 + j >= num || n - 1 - j < 0) {
+			// 여학생
+			} else if (switches[i][0] == 2) {
+				int cur = switches[i][1]-1;
+				for (int j = 0; j < arr.length; j++) {
+					if (cur-j < 0 || cur+j >arr.length-1) {
 						break;
 					}
-					if (swich[n - 1 - j] == swich[n - 1 + j]) {
-						swich[n - 1 - j] = swich[n - 1 - j] == 0 ? 1 : 0;
-						swich[n - 1 + j] = swich[n - 1 + j] == 0 ? 1 : 0;
+					
+					if (arr[cur - j] == arr[cur + j]) {
+						if (arr[cur - j] == 0 && arr[cur + j] == 0) {
+							arr[cur - j] = 1;
+							arr[cur + j] = 1;
+						} else if (arr[cur - j] == 1 && arr[cur + j] == 1) {
+							arr[cur - j] = 0;
+							arr[cur + j] = 0;
+						}
+						
+					}else {
+						break;
 					}
-					else break;
 				}
 			}
 		}
-
-		for (int i = 0; i < swich.length; i++) {
-			System.out.print(swich[i] + " ");
-			if ((i + 1) % 20 == 0) // 20개의 스위치마다 줄바꿈 추가
+		for (int i = 0; i < arr.length; i++) {
+			System.out.print(arr[i] + " ");
+			if ((i+1)%20 == 0) {
 				System.out.println();
-
+			}
 		}
 	}
 }
