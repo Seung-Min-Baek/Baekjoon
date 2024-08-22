@@ -3,58 +3,61 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Main {
-	static int n;
 
-	public static void main(String[] args) throws NumberFormatException, IOException {
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		n = Integer.parseInt(br.readLine());
-
+		// 원소 개수 입력 받기
+		int n = Integer.parseInt(br.readLine());
+		// 원소 저장할 배열 생성
 		int[] arr = new int[n];
-		for (int i = 0; i < n; i++) {
+		// 최댓값 저장할 변수 선언(최대 자릿수 구하기 위함)
+		int max = Integer.MIN_VALUE;
+		// 배열 원소 입력 받기
+		for (int i = 0; i < arr.length; i++) {
 			arr[i] = Integer.parseInt(br.readLine());
+			// 입력받으면서 최댓값도 같이 저장
+			max = Math.max(max, arr[i]);
 		}
-		br.close();
-		radix_sort(arr, 5);
-		for (int i = 0; i < n; i++) {
+		
+		// 기수 정렬 수행
+		radixSort(arr, 5);
+		
+		// 정렬된 결과 출력
+		for (int i = 0; i < arr.length; i++) {
+//			System.out.println(arr[i]);
 			bw.write(arr[i] + "\n");
 		}
 		bw.flush();
 		bw.close();
-
 	}
-
-	static void radix_sort(int[] arr, int max_size) {
-
-		// num : 자리수
-		int num = 1;
-		int cnt = 0;
-		// 새로 정렬된 배열이 들어갈 공간.
-		int[] new_arr = new int[n];
-
-		while (cnt != max_size) {
+	
+	static void radixSort(int[] arr, int k) {
+		int[] output = new int[arr.length];
+		int jarisu = 1;
+		int count = 0;
+		
+		while(count != k) {
 			int[] bucket = new int[10];
-			// bucket에 각 자리수마다 있는 수 세기
-			for (int i = 0; i < n; i++) {
-				bucket[(arr[i] / num) % 10]++;
+			for (int i = 0; i < arr.length; i++) {
+				bucket[(arr[i]/jarisu)%10]++;
 			}
-			// 합으로 index 정렬
 			for (int i = 1; i < 10; i++) {
-				bucket[i] += bucket[i - 1];
+				bucket[i] += bucket[i-1];
 			}
-			for (int i = n -1; i >= 0; i--) {
-				new_arr[bucket[(arr[i] / num % 10)] - 1] = arr[i];
-				bucket[(arr[i] / num) %10] --;
+			for (int i = arr.length - 1; i >= 0; i--) {
+				output[bucket[(arr[i]/jarisu % 10)] - 1] = arr[i];
+				bucket[(arr[i]/jarisu) % 10]--;
 			}
-
-			for (int i = 0; i < n; i++) {
-				arr[i] = new_arr[i];
+			for (int i = 0; i < arr.length; i++) {
+				arr[i] = output[i];
 			}
-			num = num *10;
-			cnt++;
+			jarisu = jarisu * 10;
+			count++;
 		}
 	}
 }
