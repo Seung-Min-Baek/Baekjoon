@@ -8,7 +8,8 @@ public class Main {
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
+		StringBuilder sb =new StringBuilder();
+		
 		int n = Integer.parseInt(br.readLine());
 
 		char[][] map = new char[n][n];
@@ -42,19 +43,18 @@ public class Main {
 			for (int j = 0; j < newMap.length; j++) {
 				if(newMap[i][j] == -1) {
 					map[i][j] = '*';
+					sb.append(map[i][j]);
 				} else if (newMap[i][j] >= 10) {
 					map[i][j] = 'M';
+					sb.append(map[i][j]);
 				} else {
 					map[i][j] = (char) (newMap[i][j] + '0');
+					sb.append(map[i][j]);
 				}
 			}
+			sb.append("\n");
 		}
 
-		for (int i = 0; i < newMap.length; i++) {
-			for (int j = 0; j < newMap.length; j++) {
-				System.out.print(map[i][j]);
-			}
-			System.out.println();
-		}
+		System.out.println(sb);
 	}
 }
