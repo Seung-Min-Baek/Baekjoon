@@ -1,57 +1,55 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Solution {
-
-	static int n;
-	static double result;
-	static int[][] persent;
-	static int[] work;
+	static double[][] arr;
 	static boolean[] visited;
-	
-	public static void main(String[] args) throws IOException {
+	static double maxp;
+	static int n;
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int T = Integer.parseInt(br.readLine());
-		for (int t = 1; t <= T; t++) {
+		StringTokenizer st;
+
+		int t = Integer.parseInt(br.readLine());
+
+		for (int test = 1; test <= t; test++) {
 			n = Integer.parseInt(br.readLine());
-			
-			persent = new int[n][n];
-			visited = new boolean[n];
-			result = 0;
-			
-			for (int i = 0; i < persent.length; i++) {
-				StringTokenizer st = new StringTokenizer(br.readLine());
-				for (int j = 0; j < persent[i].length; j++) {
-					persent[i][j] = Integer.parseInt(st.nextToken());
+
+			arr = new double[n][n];
+			for (int i = 0; i < n; i++) {
+				st = new StringTokenizer(br.readLine());
+				for (int j = 0; j < n; j++) {
+					arr[i][j] = Integer.parseInt(st.nextToken()) * 0.01;
 				}
 			}
-			
-			dfs(0, 100);
-			System.out.printf("#%d %.6f\n", t, result);
-			
+			maxp = 0;
+			visited = new boolean[n];
+
+			dfs(0, 1);
+
+			System.out.printf("#%d %.6f\n", test, maxp * 100);
 		}
 	}
 
-	static void dfs(int depth, double nowP) {
-		if(result >= nowP)
-			return;
-		
-		if(depth == n) {
-			result = Math.max(result, nowP);
+	static void dfs(int x, double p) {
+		if(p<=maxp) {
 			return;
 		}
 		
+		if (x == n) {
+			maxp = Math.max(p, maxp);
+			return;
+		}
 		
-		for (int i = 0; i < persent.length; i++) {
-			if(!visited[i]) {
+		for (int i = 0; i < n; i++) {
+			if (!visited[i]) {
 				visited[i] = true;
-				dfs(depth+1, nowP*persent[depth][i]*0.01);
-				visited[i] = false;
+				dfs(x + 1, p * arr[x][i]);
+				visited[i] =false;
 			}
 		}
-		
 	}
 }
